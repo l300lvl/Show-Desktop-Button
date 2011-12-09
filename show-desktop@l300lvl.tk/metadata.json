@@ -1,0 +1,8 @@
+{
+"uuid": "show-desktop@l300lvl.tk",
+"name": "Show Desktop Button",
+"localedir": "/usr/share/locale",
+"description": "Tested on 3.2 only. Hides all open windows and shows the desktop, this is taken from the MGSE Window List and modified into a single button",
+"shell-version": [ "3.2" ],
+"url": "https://launchpad.net/~l300lvl"
+}
