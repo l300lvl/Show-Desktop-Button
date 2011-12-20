@@ -1,0 +1,18 @@
+.button-box {
+    spacing: 2px;
+}
+
+.desktop {
+    width: 24px;
+    height: 24px;
+    background-image: url("images/show-desktop.png");
+    padding: 2px;
+}
+
+.desktop:hover {
+    width: 24px;
+    height: 24px;
+    background-image: url("images/show-desktop-hover.png");
+    padding: 2px;
+}
+
