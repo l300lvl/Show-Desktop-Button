@@ -15,21 +15,19 @@ const AppDisplay = imports.ui.appDisplay;
 const AltTab = imports.ui.altTab;
 const Gio = imports.gi.Gio;
 
-//const PANEL_ICON_SIZE = 24;
-//const SPINNER_ANIMATION_TIME = 1;
+const PANEL_ICON_SIZE = 24;
 
 function ShowDesktopButton() {
     this._init();
 }
 
 ShowDesktopButton.prototype = {
-//    __proto__ : ShowDesktopButton.prototype,
 
     _init: function() {
-        this.actor = new St.Button();
-        let icon = new St.Icon({icon_name: "desktop", icon_size: 24, icon_type: St.IconType.FULLCOLOR});             
+        this.actor = new St.Button({style_class: "desktop", can_focus: true, reactive: true, track_hover: true});
+        this.actor.set_tooltip_text('Show Desktop'); //impliment statement
+        let icon = new St.Icon();
         this.actor.add_actor(icon);
-        
         this.actor.connect("clicked", Lang.bind(this, this._toggleShowDesktop));
         
         this._tracker = Shell.WindowTracker.get_default();
@@ -76,21 +74,13 @@ ShowDesktopButton.prototype = {
     }
 };
 
-//let button;
-//let windowList;
-//let bottomPosition;
-//let appMenu;
+let windowList;
 
 function init() {
     button = new ShowDesktopButton();
-    // Find out if the bottom panel extension is enabled    
-    let settings = new Gio.Settings({ schema: 'org.gnome.shell' });
-//    let enabled_extensions = settings.get_strv('enabled-extensions');
 }
 
 function enable() {	               
-    // Create a show desktop button   
-    //Main.panel._leftBox.add(button.actor, { x_fill: true, y_fill: true });
     Main.panel._leftBox.insert_actor(button.actor, 1);
 }
 
