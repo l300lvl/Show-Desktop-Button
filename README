@@ -3,3 +3,5 @@ This is my first write up/modification of a Gnome Shell Extension, which has mai
 The idea of this was taken from the MGSE Window List as a proof of concept, and for the fun of learning how js works with Gnome Shell, it has been a great learning curve already.
 
 Description: Places a button to the left of the Window List to hide all windows and show the current desktop, this is a split-off of the MGSE Window List, most code credit goes to Linux Mint and MGSE devs
+
+TODO for version 4: Add placement options.
