@@ -15,8 +15,9 @@ const AppDisplay = imports.ui.appDisplay;
 const AltTab = imports.ui.altTab;
 const Gio = imports.gi.Gio;
 
-const PANEL_ICON_SIZE = 24;
-
+//the following line lets you choose placement options, center is to the left of the clock and center2 is to the right of it.
+const TOP_BOX = 'left'; //options are left, right, center, center2, there is also left2 as an alternate left option.
+//dont touch anything below this line
 function ShowDesktopButton() {
     this._init();
 }
@@ -25,7 +26,6 @@ ShowDesktopButton.prototype = {
 
     _init: function() {
         this.actor = new St.Button({style_class: "desktop", can_focus: true, reactive: true, track_hover: true});
-        this.actor.set_tooltip_text('Show Desktop'); //impliment statement
         let icon = new St.Icon();
         this.actor.add_actor(icon);
         this.actor.connect("clicked", Lang.bind(this, this._toggleShowDesktop));
@@ -38,6 +38,7 @@ ShowDesktopButton.prototype = {
     },
       
     _toggleShowDesktop: function() {
+        Main.overview.hide();
         let metaWorkspace = global.screen.get_active_workspace();
         let windows = metaWorkspace.list_windows();
         
@@ -74,16 +75,47 @@ ShowDesktopButton.prototype = {
     }
 };
 
+let favorites;
+let button;
 let windowList;
+let appMenu;
 
 function init() {
     button = new ShowDesktopButton();
 }
 
 function enable() {	               
-    Main.panel._leftBox.insert_actor(button.actor, 1);
+        let showdesktop = TOP_BOX;
+ 
+                    if (showdesktop == 'left') {
+        let _children = Main.panel._leftBox.get_children();
+        Main.panel._leftBox.insert_actor(button.actor, _children.length - 1);
+        Main.panel._leftBox.add(button.actor);
+                    }  else if (showdesktop == 'left2') {
+        Main.panel._leftBox.insert_actor(button.actor, 1);
+                    }  else if (showdesktop == 'right') {
+        let _children = Main.panel._rightBox.get_children();
+        Main.panel._rightBox.insert_actor(button.actor, _children.length);
+        Main.panel._rightBox.add(button.actor, 1);
+                    } else if (showdesktop == 'center') {
+        Main.panel._centerBox.insert_actor(button.actor, 0);
+                    } else if (showdesktop == 'center2') {
+        Main.panel._centerBox.insert_actor(button.actor, -1);
+                    }
 }
 
 function disable() {             
-    Main.panel._leftBox.remove_actor(button.actor);
+        let showdesktop = TOP_BOX;
+//        this.button.actor.destroy()
+                    if (showdesktop == 'left') {
+        Main.panel._leftBox.remove_actor(button.actor);
+                    } else if (showdesktop == 'left2') {
+        Main.panel._leftBox.remove_actor(button.actor);
+                    } else if (showdesktop == 'right') {
+        Main.panel._rightBox.remove_actor(button.actor);
+                    } else if (showdesktop == 'center') {
+        Main.panel._centerBox.remove_actor(button.actor);
+                    } else if (showdesktop == 'center2') {
+        Main.panel._centerBox.remove_actor(button.actor);
+                    }
 }
