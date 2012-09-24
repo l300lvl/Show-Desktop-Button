@@ -89,18 +89,18 @@ function enable() {
  
                     if (showdesktop == 'left') {
         let _children = Main.panel._leftBox.get_children();
-        Main.panel._leftBox.insert_actor(button.actor, _children.length - 1);
+        Main.panel._leftBox.insert_child_at_index(button.actor, _children.length - 1);
         Main.panel._leftBox.add(button.actor);
                     }  else if (showdesktop == 'left2') {
-        Main.panel._leftBox.insert_actor(button.actor, 1);
+        Main.panel._leftBox.insert_child_at_index(button.actor, 1);
                     }  else if (showdesktop == 'right') {
         let _children = Main.panel._rightBox.get_children();
-        Main.panel._rightBox.insert_actor(button.actor, _children.length);
+        Main.panel._rightBox.insert_child_at_index(button.actor, _children.length);
         Main.panel._rightBox.add(button.actor, 1);
                     } else if (showdesktop == 'center') {
-        Main.panel._centerBox.insert_actor(button.actor, 0);
+        Main.panel._centerBox.insert_child_at_index(button.actor, 0);
                     } else if (showdesktop == 'center2') {
-        Main.panel._centerBox.insert_actor(button.actor, -1);
+        Main.panel._centerBox.insert_child_at_index(button.actor, -1);
                     }
 }
 
