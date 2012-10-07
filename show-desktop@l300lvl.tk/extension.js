@@ -1,3 +1,4 @@
+
 const Clutter = imports.gi.Clutter;
 const Lang = imports.lang;
 const Shell = imports.gi.Shell;
@@ -15,28 +16,54 @@ const AppDisplay = imports.ui.appDisplay;
 const AltTab = imports.ui.altTab;
 const Gio = imports.gi.Gio;
 
-//the following line lets you choose placement options, center is to the left of the clock and center2 is to the right of it.
-const TOP_BOX = 'left'; //options are left, right, center, center2, there is also left2 as an alternate left option.
-//dont touch anything below this line
-function ShowDesktopButton() {
-    this._init();
+const Gettext = imports.gettext.domain('show-desktop-button');
+const _ = Gettext.gettext;
+
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+const Convenience = Me.imports.convenience;
+const Keys = Me.imports.keys;
+
+let box;
+
+function ShowDesktopButton(extensionMeta) {
+    this._init(extensionMeta);
 }
 
 ShowDesktopButton.prototype = {
 
-    _init: function() {
+    _init: function(extensionMeta) {
+        this.extensionMeta = extensionMeta;
+        this._settings = Convenience.getSettings();
         this.actor = new St.Button({style_class: "desktop", can_focus: true, reactive: true, track_hover: true});
         let icon = new St.Icon();
         this.actor.add_actor(icon);
         this.actor.connect("clicked", Lang.bind(this, this._toggleShowDesktop));
-        
         this._tracker = Shell.WindowTracker.get_default();
         
         this._desktopShown = false;
         
         this._alreadyMinimizedWindows = [];
+
+        this._settingsSignals = [];
+        this._settingsSignals.push(this._settings.connect('changed::'+Keys.POSITION, Lang.bind(this, this._setPosition)));
+        this.boxPosition = this._settings.get_string(Keys.POSITION);
+        box = Main.panel["_" + this.boxPosition + "Box"];
     },
-      
+
+    _setPosition: function() {
+        let oldPosition = this.boxPosition;
+        this.boxPosition = this._settings.get_string(Keys.POSITION);
+
+        // remove box
+        let box = Main.panel["_" + oldPosition + "Box"];
+        box.remove_actor(button.actor);
+
+        // add box
+        box = Main.panel["_" + this.boxPosition + "Box"];
+        box.insert_child_at_index(button.actor, 1);
+    },
+
     _toggleShowDesktop: function() {
         Main.overview.hide();
         let metaWorkspace = global.screen.get_active_workspace();
@@ -75,47 +102,17 @@ ShowDesktopButton.prototype = {
     }
 };
 
-let favorites;
 let button;
-let windowList;
-let appMenu;
 
 function init() {
     button = new ShowDesktopButton();
 }
 
 function enable() {	               
-        let showdesktop = TOP_BOX;
- 
-                    if (showdesktop == 'left') {
         let _children = Main.panel._leftBox.get_children();
-        Main.panel._leftBox.insert_child_at_index(button.actor, _children.length - 1);
-        Main.panel._leftBox.add(button.actor);
-                    }  else if (showdesktop == 'left2') {
-        Main.panel._leftBox.insert_child_at_index(button.actor, 1);
-                    }  else if (showdesktop == 'right') {
-        let _children = Main.panel._rightBox.get_children();
-        Main.panel._rightBox.insert_child_at_index(button.actor, _children.length);
-        Main.panel._rightBox.add(button.actor, 1);
-                    } else if (showdesktop == 'center') {
-        Main.panel._centerBox.insert_child_at_index(button.actor, 0);
-                    } else if (showdesktop == 'center2') {
-        Main.panel._centerBox.insert_child_at_index(button.actor, -1);
-                    }
+        box.insert_child_at_index(button.actor, _children.length - 1);
 }
 
 function disable() {             
-        let showdesktop = TOP_BOX;
-//        this.button.actor.destroy()
-                    if (showdesktop == 'left') {
-        Main.panel._leftBox.remove_actor(button.actor);
-                    } else if (showdesktop == 'left2') {
-        Main.panel._leftBox.remove_actor(button.actor);
-                    } else if (showdesktop == 'right') {
-        Main.panel._rightBox.remove_actor(button.actor);
-                    } else if (showdesktop == 'center') {
-        Main.panel._centerBox.remove_actor(button.actor);
-                    } else if (showdesktop == 'center2') {
-        Main.panel._centerBox.remove_actor(button.actor);
-                    }
+        box.remove_actor(button.actor);
 }

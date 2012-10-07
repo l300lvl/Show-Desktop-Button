@@ -1,18 +1,14 @@
-.button-box {
-    spacing: 0px;
-}
-
 .desktop {
-    width: 24px;
+/* todo: move height to js */
     height: 21px;
     background-image: url("images/show-desktop.png");
-    padding: 2px;
+
 }
 
 .desktop:hover {
-    width: 24px;
+
     height: 21px;
     background-image: url("images/show-desktop-hover.png");
-    padding: 2px;
+
 }
 
