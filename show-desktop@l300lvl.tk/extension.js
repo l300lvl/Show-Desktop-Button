@@ -48,20 +48,30 @@ ShowDesktopButton.prototype = {
         this._settingsSignals = [];
         this._settingsSignals.push(this._settings.connect('changed::'+Keys.POSITION, Lang.bind(this, this._setPosition)));
         this.boxPosition = this._settings.get_string(Keys.POSITION);
+        if (this.boxPosition == 'tray') {
+        box = Main.messageTray.actor;
+        } else {
         box = Main.panel["_" + this.boxPosition + "Box"];
+        }
     },
 
     _setPosition: function() {
         let oldPosition = this.boxPosition;
         this.boxPosition = this._settings.get_string(Keys.POSITION);
-
-        // remove box
+        if (this.boxPosition == 'tray') {
+        let box = Main.messageTray.actor;
+        } else {
         let box = Main.panel["_" + oldPosition + "Box"];
+        }
         box.remove_actor(button.actor);
 
-        // add box
+        if (this.boxPosition == 'tray') {
+        box = Main.messageTray.actor;
+        } else {
         box = Main.panel["_" + this.boxPosition + "Box"];
         box.insert_child_at_index(button.actor, 1);
+        }
+        box.add_actor(button.actor, 0);
     },
 
     _toggleShowDesktop: function() {
@@ -109,8 +119,14 @@ function init() {
 }
 
 function enable() {	               
-        let _children = Main.panel._leftBox.get_children();
-        box.insert_child_at_index(button.actor, _children.length - 1);
+        this._settings = Convenience.getSettings();
+        let boxPosition = this._settings.get_string(Keys.POSITION);
+
+        if (this.boxPosition == 'tray') {
+        box.add_actor(button.actor);
+        } else {
+        box.insert_child_at_index(button.actor, 1);
+        }
 }
 
 function disable() {             

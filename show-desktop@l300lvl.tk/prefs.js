@@ -18,7 +18,8 @@ const Keys = Me.imports.keys;
 const RADIO_BTNS = [
         "left",
         "center",
-        "right"
+        "right",
+        "tray"
     ];
 
 function init() {

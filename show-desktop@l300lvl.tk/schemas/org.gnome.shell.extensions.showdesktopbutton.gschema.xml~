@@ -4,7 +4,7 @@
     <key type="s" name="panel-position-key">
      	<default>'center'</default>
     	<summary>Position on panel.</summary>
-      	<description>Sets the position of the extension on the panel. Possible values are: Left, Center, Right and Tray.</description>
+      	<description>Sets the position of the extension on the panel. Possible values are: Left, Center, and Right.</description>
     </key>
   </schema>
 </schemalist>
