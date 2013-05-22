@@ -5,7 +5,7 @@ const GObject = imports.gi.GObject;
 const Gtk = imports.gi.Gtk;
 const St = imports.gi.St;
 const Lang = imports.lang;
-const Gettext = imports.gettext.domain('show-desktop-button;');
+const Gettext = imports.gettext.domain('show-desktop-button');
 const _ = Gettext.gettext;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
@@ -16,10 +16,10 @@ const Keys = Me.imports.keys;
 
 //const SHOW_OVERVIEW = _N("Show Overview");
 const RADIO_BTNS = [
-        "left",
-        "center",
-        "right",
-        "tray"
+        _("left"),
+        _("center"),
+        _("right"),
+        _("tray")
     ];
 
 function init() {
@@ -58,7 +58,7 @@ ShowDesktopSettingsWidget.prototype = {
         let str = '';
         for (element in RADIO_BTNS) {
             let str = RADIO_BTNS[element];
-            radio = new Gtk.RadioButton({ group: radio, label: this._capitalised(str), valign: Gtk.Align.START });
+            radio = new Gtk.RadioButton({ group: radio, label: this._capitalised(_(str)), valign: Gtk.Align.START });
             this._grid.attach(radio, count, 1, 1, 1);
 
             radio.connect('toggled', Lang.bind(this, function(widget) {
