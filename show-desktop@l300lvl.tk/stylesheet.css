@@ -1,13 +1,11 @@
 .desktop {
 /* todo: move height to js */
-    height: 21px;
     background-image: url("images/show-desktop.png");
 
 }
 
 .desktop:hover {
 
-    height: 21px;
     background-image: url("images/show-desktop-hover.png");
 
 }

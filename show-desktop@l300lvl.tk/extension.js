@@ -36,7 +36,7 @@ ShowDesktopButton.prototype = {
         this.extensionMeta = extensionMeta;
         this._settings = Convenience.getSettings();
         this.actor = new St.Button({style_class: "desktop", can_focus: true, reactive: true, track_hover: true});
-        let icon = new St.Icon();
+        let icon = new St.Icon({icon_size: Main.panel.actor.height});
         this.actor.add_actor(icon);
         this.actor.connect("clicked", Lang.bind(this, this._toggleShowDesktop));
         this._tracker = Shell.WindowTracker.get_default();
