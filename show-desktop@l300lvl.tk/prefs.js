@@ -5,7 +5,7 @@ const GObject = imports.gi.GObject;
 const Gtk = imports.gi.Gtk;
 const St = imports.gi.St;
 const Lang = imports.lang;
-const Gettext = imports.gettext.domain('show-desktop-button;');
+const Gettext = imports.gettext.domain('show-desktop-button');
 const _ = Gettext.gettext;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
@@ -18,8 +18,7 @@ const Keys = Me.imports.keys;
 const RADIO_BTNS = [
         "left",
         "center",
-        "right",
-        "tray"
+        "right"
     ];
 
 function init() {
@@ -54,7 +53,7 @@ ShowDesktopSettingsWidget.prototype = {
 
         //build radio buttons
         let currentPosition = this._settings.get_string(Keys.POSITION);
-        let count = 4;
+        let count = 3;
         let str = '';
         for (element in RADIO_BTNS) {
             let str = RADIO_BTNS[element];

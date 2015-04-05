@@ -4,8 +4,9 @@ const Main = imports.ui.main;
 const Tweener = imports.ui.tweener;
 const Util = imports.misc.util;
 const Panel = imports.ui.panel;
+const PanelMenu = imports.ui.panelMenu;
 
-let text, indicatorBox, button;
+let text, indicatorBox, button, newActor;
 
 
 function _showDesktop() {
@@ -52,11 +53,11 @@ function init(extensionMeta) {
     theme.append_search_path(extensionMeta.path + "/icons");
     let scaleFactor = St.ThemeContext.get_for_stage(global.stage).scale_factor;
 
-    indicatorBox = new St.BoxLayout();
+    indicatorBox = new PanelMenu.Button(0.0);
+//    const iconSize = Panel.PANEL_ICON_SIZE * scaleFactor;
     let icon = new St.Icon({
 //        icon_name: 'my-show-desktop-hover-symbolic',
-//        let iconSize = Panel.PANEL_ICON_SIZE * scaleFactor,
-//        icon_size: iconSize,
+//        icon_size: iconSize - 2,
         style_class: 'system-status-icon' //original
     });
 //    icon.add_style_class_name('system-status-icon');
@@ -68,13 +69,16 @@ function init(extensionMeta) {
         can_focus: true,
         x_fill: true,
         y_fill: false,
-        y_align: St.Align.START,
+        y_align: St.Align.MIDDLE,
         track_hover: true
     });
     button.add_style_class_name('panel-button');
 
     button.connect('button-press-event', _showDesktop);
-    indicatorBox.add(button);
+
+
+//    newActor = indicatorBox;
+
 
 
 //    indicatorBox.add_style_class_name('panel-status-button');
@@ -83,11 +87,24 @@ function init(extensionMeta) {
 }
 
 function enable() {
-    let appMenu = Main.panel.statusArea.appMenu.actor.get_parent();
-    Main.panel._leftBox.insert_child_below(indicatorBox, appMenu);
+//    let appMenu = Main.panel.statusArea.appMenu.actor.get_parent();
+//    Main.panel._leftBox.insert_child_below(indicatorBox.actor, appMenu);
+//    let newActor = indicatorBox;
+//    Main.panel._leftBox.add_actor(indicatorBox.actor, appMenu);
+    indicatorBox.actor.add_actor(button);
+    Main.panel.addToStatusArea("ShowDesktop", indicatorBox, 1, "left");
+//    return newActor.actor;
+
 }
 
 function disable() {
-    Main.panel._leftBox.remove_child(indicatorBox);
+//    let appMenu = Main.panel._leftBox("ShowDesktop");
+//    Main.panel._leftBox.remove_actor(appMenu);
+//    let newActor = indicatorBox;
+    indicatorBox.actor.remove_actor(button);
+    Main.panel.statusArea['ShowDesktop'].destroy();
+//    Main.panel.statusArea['ShowDesktop'] = null;
+
+//    return indicatorBox;
 }
 
