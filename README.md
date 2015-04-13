@@ -3,7 +3,7 @@ This is my first Gnome Shell Extension.
 The idea of this was taken from the MGSE Window List as a proof of concept, and for the fun of learning how js works with Gnome Shell, it has been a great learning curve already.
 
 ### TODO:
-reimpliment placement options
+reimpliment placement options _partially fixed_
 reimpliment localisation
 impliment icon and spacing options
 
@@ -14,7 +14,11 @@ Places a button to the left of the Window List to hide all windows, and the over
 *icon credit madkristoff(thanks, this is _still_ the only icon created and submitted!)* 
 credit: madkristoff, mbokil, simonthechipmunk, MGSE, erguille, mikechaberski, mathematicalcoffee, asan, spinus, Xes, gcampax, magcius. 
 
-newest v15: minimizes and restores only unminimized windows again, added gpl, more cleanup, 16 will fix icon and remove stylesheet probably
+newest v17: placement option returns, left right or center only for now.
+
+v16: skipped, bug on ego caused version jump. ego does not have editting or rebasing options
+
+v15: minimizes and restores only unminimized windows again, added gpl, more cleanup, 18 will fix icon and remove stylesheet probably
 
 v14: lots of cleanup, now an actual button that doesnt break keyboard/panel functionality, and major shoutouts to those that make this possible.
 
