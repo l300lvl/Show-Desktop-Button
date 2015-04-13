@@ -3,8 +3,10 @@ const St = imports.gi.St;
 const Main = imports.ui.main;
 const Panel = imports.ui.panel;
 const PanelMenu = imports.ui.panelMenu;
-
-let indicatorBox, icon, _desktopShown, _alreadyMinimizedWindows;
+const Me = imports.misc.extensionUtils.getCurrentExtension();
+const Convenience = Me.imports.convenience;
+const Keys = Me.imports.keys;
+let indicatorBox, icon, _desktopShown, _alreadyMinimizedWindows, box, _settings;
 
 function _showDesktop() {
     if (Main.overview.visible)
@@ -45,6 +47,10 @@ function _showDesktop() {
 }
 
 function ShowDesktopButton() {
+    this._settingsSignals = [];
+    this._settingsSignals.push(_settings.connect('changed::' + Keys.POSITION, _setPosition));
+    this.boxPosition = _settings.get_string(Keys.POSITION);
+    box = this.boxPosition;
     indicatorBox = new PanelMenu.Button(0.0);
     icon = new St.Icon({
         style_class: 'system-status-icon' //keep
@@ -54,12 +60,24 @@ function ShowDesktopButton() {
 //    icon.has_tooltip = true;
 //    indicatorBox.actor.tooltip_text = "show";
     indicatorBox.actor.connect('button-press-event', _showDesktop);
-    Main.panel.addToStatusArea("ShowDesktop", indicatorBox, 1, "left");
+    Main.panel.addToStatusArea("ShowDesktop", indicatorBox, 1, box);
+}
+
+function _setPosition() {
+    let oldPosition = this.boxPosition;
+    this.boxPosition = _settings.get_string(Keys.POSITION);
+    let box = oldPosition;
+    //check that indicatorBox is present, or settings will throw error work when disabled
+    if (indicatorBox !== null) {
+        disable();
+        enable();
+    }
 }
 
 function init(extensionMeta) {
     _desktopShown = false;
     _alreadyMinimizedWindows = [];
+    _settings = Convenience.getSettings();
 //    bits and pieces i may implement or use at some poiunt
 //    let theme = imports.gi.Gtk.IconTheme.get_default();
 //    theme.append_search_path(extensionMeta.path + "/icons");
