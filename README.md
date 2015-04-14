@@ -4,7 +4,7 @@ The idea of this was taken from the MGSE Window List as a proof of concept, and 
 
 ### TODO:
 reimpliment placement options _partially fixed_
-reimpliment localisation
+reimpliment localisation _scheduled for v19_
 impliment icon and spacing options
 
 ### Description: 
@@ -14,12 +14,11 @@ Places a button to the left of the Window List to hide all windows, and the over
 *icon credit madkristoff(thanks, this is _still_ the only icon created and submitted!)* 
 credit: madkristoff, mbokil, simonthechipmunk, MGSE, erguille, mikechaberski, mathematicalcoffee, asan, spinus, Xes, gcampax, magcius. 
 
-newest v17: placement option returns, left right or center only for now.
+newest v18: stylesheet removed, now uses system style, more cleanup & notations.
 
+v17: placement option returns, left right or center only for now.
 v16: skipped, bug on ego caused version jump. ego does not have editting or rebasing options
-
 v15: minimizes and restores only unminimized windows again, added gpl, more cleanup, 18 will fix icon and remove stylesheet probably
-
 v14: lots of cleanup, now an actual button that doesnt break keyboard/panel functionality, and major shoutouts to those that make this possible.
 
 v13: reimplimented entire structure based on shell changes since 3.12, this is now more of an actual button than ever(see wip branch too).
