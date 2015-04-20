@@ -8,16 +8,18 @@ const PanelMenu = imports.ui.panelMenu;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
 const Keys = Me.imports.keys;
-
-let indicatorBox, icon, _desktopShown, _alreadyMinimizedWindows, box, _settings, binButton, baseGIcon, hoverGIcon, buttonIcon;
-
+const Shell = imports.gi.Shell;
+//needed for hiding mouse over tooltip
+const Tweener = imports.ui.tweener;
+let indicatorBox, icon, _desktopShown, _alreadyMinimizedWindows, box, _settings, binButton, baseGIcon, hoverGIcon, buttonIcon, shouldrestore, focus;
+    //toggles the desktop and icon when clicked
 function _showDesktop() {
     let metaWorkspace = global.screen.get_active_workspace();
     let windows = metaWorkspace.list_windows();
     if (_desktopShown) {
         for ( let i = 0; i < windows.length; ++i ) {
             if (windows[i].minimized){
-                let shouldrestore = true;
+                shouldrestore = true;
                 for (let j = 0; j < _alreadyMinimizedWindows.length; j++) {
                     if (windows[i] == _alreadyMinimizedWindows[j]) {
                         shouldrestore = false;
@@ -25,7 +27,15 @@ function _showDesktop() {
                     }
                 }
             if (shouldrestore) {
-                //only check and hide overview when button clicked geez
+                //toggle icon to the opposite settings when windows are minimized
+                icon.set_gicon(baseGIcon);
+                binButton.connect('enter-event', function() {
+                    _SetButtonIcon('hover');
+                });
+                binButton.connect('leave-event', function() {
+                    _SetButtonIcon('base');
+                });
+                //only check and hide overview when button clicked durp durp
                 if (Main.overview.visible) {
                 Main.overview.hide();
                 }
@@ -41,10 +51,24 @@ function _showDesktop() {
         for ( let i = 0; i < windows.length; ++i ) {
             if (!windows[i].skip_taskbar){
                 if (!windows[i].minimized) {
-                    //only check and hide overview when button clicked geez
+                    //set dfault hover icon when no windows minimized
+                    icon.set_gicon(hoverGIcon);
+                    binButton.connect('enter-event', function() {
+                        _SetButtonIcon('base');
+                    });
+                  //  binButton.connect('enter-event', function() {
+                   //     _showTitle('show');
+                        
+                   // });
+                    binButton.connect('leave-event', function() {
+                        _SetButtonIcon('hover');
+                        
+                    });
+                    //only check and hide overview when button clicked durp durp
                     if (Main.overview.visible) {
                     Main.overview.hide();
                     }
+                    //global.screen.get_active_workspace.list_windows.has_focus;
                     windows[i].minimize(global.get_current_time());
                 } else {
                     _alreadyMinimizedWindows.push(windows[i]);
@@ -54,21 +78,21 @@ function _showDesktop() {
     }
     _desktopShown = !_desktopShown;
 }
-
+    //creates the button and sets the icon and mouse event connections finally adding everything to status area
 function ShowDesktopButton() {
     this._settingsSignals = [];
     this._settingsSignals.push(_settings.connect('changed::' + Keys.POSITION, _setPosition));
-    //get current panel box position
+    //get current panel box position this also needs help
     this.boxPosition = _settings.get_string(Keys.POSITION);
     box = this.boxPosition;
     //create initial panel button
-    indicatorBox = new PanelMenu.Button({ style_class: 'panel-button',
+    indicatorBox = new PanelMenu.Button({ style_class: 'panel-status-button',
                 reactive: true,
                 can_focus: true,
                 x_fill: true,
                 y_fill: false,
                 track_hover: true });
-    //create st.bin
+    //create st.bin we are trying to do some fanciness here which doesn't seem right maybe st layout would be better
     binButton = new St.Bin({ style_class: 'panel-button',
                 reactive: true,
                 can_focus: true,
@@ -78,7 +102,7 @@ function ShowDesktopButton() {
     //use gio for hover icons and move away from stylesheet _finally_
     baseGIcon = Gio.icon_new_for_string('my-show-desktop');
     hoverGIcon = Gio.icon_new_for_string('my-show-desktop-hover');
-    //create initial icon with system stylesheet
+    //create initial base icon with system stylesheet
     icon = new St.Icon({
         'gicon': Gio.icon_new_for_string('my-show-desktop'),
         style_class: 'system-status-icon' //sets st icon to system style
@@ -87,12 +111,13 @@ function ShowDesktopButton() {
     binButton.set_child(icon);
     //add st.bin to panel button
     indicatorBox.actor.add_actor(binButton);
+    //calls the function to toggle desktop when clicked im looking for a keybinding of some sort here too
     binButton.connect('button-press-event', _showDesktop);
-    //set hover icon
+    //set icon on mouse over
     binButton.connect('enter-event', function() {
         _SetButtonIcon('hover');
     });
-    //dont specifically need this since there is no *real* leave event 
+    //changes the icon back to base when the cursor is no longer hovering
     binButton.connect('leave-event', function() {
         _SetButtonIcon('base');
     });
@@ -107,7 +132,7 @@ function _SetButtonIcon(mode) {
         icon.set_gicon(baseGIcon);
     }
 }
-
+    //sets the panel position to left right or center when called, this needs work
 function _setPosition() {
     let oldPosition = this.boxPosition;
     this.boxPosition = _settings.get_string(Keys.POSITION);
@@ -120,7 +145,9 @@ function _setPosition() {
 }
 
 function init(extensionMeta) {
+    //sets initial desktop status
     _desktopShown = false;
+    //creates windows we have minimized variable
     _alreadyMinimizedWindows = [];
     _settings = Convenience.getSettings();
     //get icon path as gio wasnt being called correctly
