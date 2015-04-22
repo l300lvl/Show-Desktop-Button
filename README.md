@@ -4,17 +4,17 @@ The idea of this was taken from the MGSE Window List as a proof of concept, and 
 
 ### TODO:
 reimpliment placement options _partially fixed_
-reimpliment localisation _done for v19_
 impliment icon and better placement options
-restore last focused window
+restore last focused window _done_
 
 ### Description: 
 
-Places a button to the left(by default) of the Window List to hide all windows, and the overview if active, and show the current desktop. The visible icon changes when you have toggled hiding/showing of the desktop.
+Places a button to the left(by default) of the Window List to hide all windows, and the overview if active, and show the current desktop. The visible icon changes when you have toggled hiding/showing of the desktop. Can now be controlled via space/keyboard as well, when hovered, this can be achieved with ctrl/alt/tab/panel/arrows/space or enter. Eventually actual keybinding will happen.
 
 *icon credit madkristoff(thanks, this is _still_ the only icon created and submitted!)* 
 credit: madkristoff, jonnius, mbokil, simonthechipmunk, MGSE, erguille, mikechaberski, mathematicalcoffee, asan, spinus, Xes, gcampax, magcius. 
 
+v20. Huge release lots of cleanup, now works with space or enter when hovered, also restores focus to last focused window.
 v19: localized thanks to jonnius, icon now toggles modes to indicate status of windows.
 v18: stylesheet removed, now uses system style, more cleanup & notations.
 v17: placement option returns, left right or center only for now.
