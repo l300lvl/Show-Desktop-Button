@@ -55,7 +55,7 @@ ShowDesktopSettingsWidget.prototype = {
         let currentPosition = this._settings.get_string(Keys.POSITION);
         let count = 3;
         let str = '';
-        for (element in RADIO_BTNS) {
+        for (let element in RADIO_BTNS) {
             let str = RADIO_BTNS[element];
             radio = new Gtk.RadioButton({ group: radio, label: this._capitalised(_(str)), valign: Gtk.Align.START });
             this._grid.attach(radio, count, 1, 1, 1);
